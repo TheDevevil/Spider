@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spider Beamer</title>
+    <style>
+        /* Spider-themed Effects */
+        body {
+            font-family: 'Creepster', cursive, Arial, sans-serif;
+            background-color: #0d0d0d;
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-light.png');
+            margin: 0;
+            padding: 20px;
+            color: #e0e0e0;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            position: relative;
+            animation: webPulse 2s infinite;
+        }
+
+        @keyframes webPulse {
+            0% {
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(255, 0, 0, 1);
+            }
+
+            100% {
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            cursor: pointer;
+            padding: 10px;
+            background: #2e2e2e;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            text-align: center;
+            flex: 1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab:hover {
+            background: #8b0000;
+            transform: translateY(-5px);
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        }
+
+        .tab.active {
+            background: #ff6347;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            background-color: #8b0000;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background-color: #ff6347;
+            box-shadow: 0 0 10px #8b0000, 0 0 20px #8b0000;
+            transform: translateY(-3px);
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ff6347;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: center;
+            color: #ff6347;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ff6347;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            transition: transform 0.3s;
+        }
+
+        .item:hover {
+            transform: scale(1.05);
+        }
+
+        .item button {
+            background-color: #8b0000;
+            transition: all 0.3s ease;
+        }
+
+        .item button:hover {
+            background-color: #cc0000;
+            box-shadow: 0 0 10px #ff6347, 0 0 20px #ff6347;
+        }
+
+        /* Neon effect on input */
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #ff6347, 0 0 20px #ff6347;
+        }
+
+        .quantity-input {
+            width: 100px;
+            margin-right: 10px;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🕷️ Spider Beamer 🕸️</h1>
+        <div class="tabs">
+            <div class="tab active" data-tab="cookie">🕸️ Spider Payload</div>
+            <div class="tab" data-tab="gift">🎁 Cursed Links</div>
+        </div>
+
+        <!-- Spider Payload Generator -->
+        <div id="cookie" class="tab-content active">
+            <input type="number" id="cookieQuantity" class="quantity-input" value="1" min="1" placeholder="Quantity">
+            <button id="generateCookie">Get Spider Payload 🕷️</button>
+            <button id="deleteAllCookies">Delete All 🕸️</button>
+            <div id="cookieList"></div>
+            <input type="text" id="webhookUrlCookie" placeholder="Enter Discord Webhook URL 🔗">
+            <button id="sendCookie">Send Spider Payload 🚀</button>
+            <div id="cookieMessage"></div>
+        </div>
+
+        <!-- Cursed Links Generator -->
+        <div id="gift" class="tab-content">
+            <input type="number" id="giftQuantity" class="quantity-input" value="1" min="1" placeholder="Quantity">
+            <button id="generateGift">Generate Cursed Links 🎁</button>
+            <button id="deleteAllGifts">Delete All Links ❌</button>
+            <div id="giftList"></div>
+            <input type="text" id="webhookUrlGift" placeholder="Enter Discord Webhook URL 🔗">
+            <button id="sendGift">Send Cursed Links 🚀</button>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Handle tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-tab');
+
+                tabContents.forEach(content => {
+                    if (content.id === target) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Generate spider payload (cookies)
+        function generateCookie() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const warningMessage = '_|WARNING:-SPIDER-BEAMER.|_';
+            let cookie = warningMessage;
+
+            for (let i = 0; i < 1611; i++) {
+                cookie += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+
+            return cookie;
+        }
+
+        function addCookieToList(cookie) {
+            const formattedCookie = `\`\`\`${cookie}\`\`\``;
+            const cookieList = document.getElementById('cookieList');
+            const item = document.createElement('div');
+            item.classList.add('item');
+            item.innerHTML = `
+                <button onclick="copyToClipboard('${formattedCookie}')">Copy</button>
+                <span>${formattedCookie}</span>
+                <button onclick="deleteItem(this)">Delete</button>`;
+            cookieList.appendChild(item);
+        }
+
+        document.getElementById('generateCookie').addEventListener('click', () => {
+            const quantity = parseInt(document.getElementById('cookieQuantity').value);
+            for (let i = 0; i < quantity; i++) {
+                const cookie = generateCookie();
+                addCookieToList(cookie);
+            }
+        });
+
+        document.getElementById('deleteAllCookies').addEventListener('click', () => {
+            document.getElementById('cookieList').innerHTML = '';
+        });
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+        }
+
+        function deleteItem(button) {
+            button.parentElement.remove();
+        }
+
+        document.getElementById('sendCookie').addEventListener('click', async () => {
+            const webhookUrl = document.getElementById('webhookUrlCookie').value;
+            const items = document.querySelectorAll('#cookieList .item');
+            const cookieMessage = document.getElementById('cookieMessage');
+
+            if (!webhookUrl) {
+                cookieMessage.innerText = 'Please enter a valid Discord webhook URL.';
+                return;
+            }
+
+            const messages = Array.from(items).map(item => item.querySelector('span').textContent.trim());
+
+            for (const message of messages) {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: message,
+                    }),
+                });
+            }
+
+            cookieMessage.innerText = 'Spider payload sent!';
+        });
+
+        // Cursed links generator
+        const urls = ['https://cursed-url-1.com', 'https://cursed-url-2.com', 'https://cursed-url-3.com'];
+
+        function generateGift() {
+            const gift = urls[Math.floor(Math.random() * urls.length)];
+            return gift;
+        }
+
+        function addGiftToList(gift) {
+            const giftList = document.getElementById('giftList');
+            const item = document.createElement('div');
+            item.classList.add('item');
+            item.innerHTML = `
+                <button onclick="copyToClipboard('${gift}')">Copy</button>
+                <span>${gift}</span>
+                <button onclick="deleteItem(this)">Delete</button>`;
+            giftList.appendChild(item);
+        }
+
+        document.getElementById('generateGift').addEventListener('click', () => {
+            const quantity = parseInt(document.getElementById('giftQuantity').value);
+            for (let i = 0; i < quantity; i++) {
+                const gift = generateGift();
+                addGiftToList(gift);
+            }
+        });
+
+        document.getElementById('deleteAllGifts').addEventListener('click', () => {
+            document.getElementById('giftList').innerHTML = '';
+        });
+
+        document.getElementById('sendGift').addEventListener('click', async () => {
+            const webhookUrl = document.getElementById('webhookUrlGift').value;
+            const items = document.querySelectorAll('#giftList .item');
+            const message = document.getElementById('message');
+
+            if (!webhookUrl) {
+                message.innerText = 'Please enter a valid Discord webhook URL.';
+                return;
+            }
+
+            const messages = Array.from(items).map(item => item.querySelector('span').textContent.trim());
+
+            for (const msg of messages) {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: msg,
+                    }),
+                });
+            }
+
+            message.innerText = 'Cursed links sent!';
+        });
+    </script>
+</body>
+
+</html>
